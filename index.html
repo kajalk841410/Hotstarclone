@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hotstar</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <style>
+    * {
+      padding: 0%;
+    }
+    #search {
+      width: 80%;
+      height: 60px;
+      border: 3px solid black;
+      border-radius: 10px;
+      margin-left: 145px;
+      font-size: large;
+      font-weight: 400;
+      padding-left: 80px;
+      margin-top: 20px;
+      color: aliceblue;
+      background-color: rgb(13, 1, 41);
+    }
+
+    .icon {
+      margin-top: 50px;
+      width: 100px;
+      border: px solid black;
+      height: 500px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      padding-left: 50px;
+      font-size: medium;
+      color: aliceblue;
+      overflow: hidden;
+      flex: 0 0 auto;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+    }
+    *main {
+      color: aliceblue;
+    }
+    h2 {
+      color: white;
+      margin-left: 10rem;
+    }
+    #popular {
+      margin-top: 50px;
+      width: 86%;
+      height: 570px;
+      border: px solid black;
+      display: flex;
+      overflow: unset;
+      display: grid;
+      grid-template-columns: repeat(5, 18%);
+      gap: 1px;
+      margin-left: 5rem;
+    }
+    img,
+    p {
+      width: 90%;
+      margin-left: 56px;
+      text-align: center;
+      padding-left: 5%;
+    }
+
+    .main {
+      display: flex;
+      gap: 1%;
+      width: 1400px;
+      grid-row: (4, 15%);
+    }
+    body {
+      background-color: black;
+    }
+    #footer {
+      position: absolute;
+      color: aliceblue;
+      margin-left: 7rem;
+    }
+    #view {
+      margin-left: 24rem;
+    }
+    #carrier {
+        
+      display: flex;
+      color: aliceblue;
+      
+    }
+    #need {
+      margin-left: 15rem;
+    }
+    #with {
+      margin-left: 13rem;
+    }
+  </style>
+  <body>
+    <input
+      id="search"
+      type="text"
+      placeholder="Movies,shows and more"
+      oninput="debounce(showresponse,2000)"
+    />
+    <h2>Popular Searches</h2>
+    <div class="main">
+      <div class="icon">
+        <i class="fa-solid fa-user-plus fa-lg"></i>
+        <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+        <i class="fa-solid fa-house fa-lg"></i>
+        <i class="fa-solid fa-tv"></i>
+        <i class="fa-solid fa-video fa-lg"></i>
+        <i class="fa-solid fa-baseball fa-lg"></i>
+      </div>
+
+      <div id="popular"></div>
+    </div>
+
+    <!-- <footer> 
+      <div id="carrier">
+        <div id="footer">
+          <h3>Company</h3>
+          <h3>About us</h3>
+          <h3>Carrier</h3>
+        </div>
+
+        <div id="view">
+          <h3>View Website in</h3>
+          <h3>English</h3>
+        </div>
+        <div id="need">
+          <h3>Need Help</h3>
+          <h3>Visit help center</h3>
+          <h3>Share Feedback</h3>
+        </div>
+
+        <div id="with">
+          <h3>Contact With us</h3>
+          <a
+            href="https://www.facebook.com/YourFacebookPage"
+            target="_blank"
+            class="social"
+            ><i class="fab fa-facebook"></i
+          ></a>
+          <a
+            href="https://twitter.com/YourTwitterPage"
+            target="_blank"
+            class="social-icons"
+            ><i class="fab fa-twitter"></i
+          ></a>
+        </div>
+      </div>
+    </footer> -->
+  </body>
+</html>
+<script>
+  let fun;
+  let moviesection = document.getElementById("popular");
+
+  async function searchmovie() {
+    let name = document.getElementById("search").value;
+    let url = `http://www.omdbapi.com/?s=${name}&apikey=c198abf`;
+
+    let response = await fetch(url);
+    let data = await response.json();
+    console.log(data);
+    return data.Search;
+  }
+  async function showresponse() {
+    moviesection.innerHTML = null;
+    let showdata = await searchmovie();
+    if (showdata === undefined) {
+      return false;
+    }
+    showdata.map(function (movie) {
+      let popular = document.getElementById("popular");
+      let postermovie = document.createElement("div");
+      let img = document.createElement("img");
+      img.style.height = "80%";
+      img.src = movie.Poster;
+      let title = document.createElement("p");
+      title.innerHTML = movie.Title;
+      postermovie.append(img, title);
+      moviesection.append(postermovie);
+    });
+    console.log(showdata);
+  }
+
+  async function showstatic() {
+    let response = await fetch(
+      `https://api.themoviedb.org/3/trending/all/day?api_key=08c5c22c019d238389302d081190581f&page=1`
+    );
+    let result = await response.json();
+    console.log(result);
+    result.results.map((movies) => {
+      let popular = document.getElementById("popular");
+      let postermovie = document.createElement("div");
+      let img = document.createElement("img");
+      img.addEventListener("mouseover",()=>{
+        img.style.trasform="scale(1.3);"
+      })
+      img.style.height = "80%";
+
+      let imageposter = movies.poster_path;
+
+      img.src = `https://image.tmdb.org/t/p/original/${imageposter}`;
+
+    //   img.src = movies.Poster;
+      let title = document.createElement("p");
+      title.innerHTML = movies.original_title;
+      postermovie.append(img, title);
+      moviesection.append(postermovie);
+    });
+  }
+  showstatic();
+
+  function debounce(functional, delay) {
+    clearTimeout(fun);
+    id = setTimeout(function () {
+      functional();
+    }, delay);
+  }
+</script>
